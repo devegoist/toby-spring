@@ -3,7 +3,6 @@ package com.devegoist.spring.dao;
 import com.devegoist.spring.model.User;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -11,9 +10,16 @@ import java.sql.ResultSet;
  * @author kim, eun soo - devegoist
  * @date 2019/12/17
  */
-public abstract class UserDao {
+public class UserDao {
+
+    private SimpleConnectionMaker simpleConnectionMaker;
+
+    public UserDao(SimpleConnectionMaker simpleConnectionMaker) {
+        this.simpleConnectionMaker = simpleConnectionMaker;
+    }
+
     public void add(User user) throws Exception {
-        Connection c = getConnection();
+        Connection c = simpleConnectionMaker.makeNewConnection();
 
         PreparedStatement ps = c.prepareStatement("insert into users (id, name, password) values (?, ?, ?)");
         ps.setString(1, user.getId());
@@ -27,7 +33,7 @@ public abstract class UserDao {
     }
 
     public User get(String id) throws Exception {
-        Connection c = getConnection();
+        Connection c = simpleConnectionMaker.makeNewConnection();
 
         PreparedStatement ps = c.prepareStatement("select * from users where id = ?");
         ps.setString(1, id);
@@ -45,6 +51,4 @@ public abstract class UserDao {
 
         return user;
     }
-
-    public abstract Connection getConnection() throws Exception;
 }
