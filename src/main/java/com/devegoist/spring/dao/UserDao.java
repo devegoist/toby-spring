@@ -12,14 +12,14 @@ import java.sql.ResultSet;
  */
 public class UserDao {
 
-    private SimpleConnectionMaker simpleConnectionMaker;
+    private ConnectionMaker connectionMaker;
 
     public UserDao() {
-        this.simpleConnectionMaker = new SimpleConnectionMaker();
+        this.connectionMaker = new DConnectionMaker();
     }
 
     public void add(User user) throws Exception {
-        Connection c = simpleConnectionMaker.makeNewConnection();
+        Connection c = connectionMaker.makeConnection();
 
         PreparedStatement ps = c.prepareStatement("insert into users (id, name, password) values (?, ?, ?)");
         ps.setString(1, user.getId());
@@ -33,7 +33,7 @@ public class UserDao {
     }
 
     public User get(String id) throws Exception {
-        Connection c = simpleConnectionMaker.makeNewConnection();
+        Connection c = connectionMaker.makeConnection();
 
         PreparedStatement ps = c.prepareStatement("select * from users where id = ?");
         ps.setString(1, id);
