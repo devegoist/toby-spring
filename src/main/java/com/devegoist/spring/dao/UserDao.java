@@ -11,27 +11,7 @@ import java.sql.ResultSet;
  * @author kim, eun soo - devegoist
  * @date 2019/12/17
  */
-public class UserDao {
-
-    public static void main(String[] args) throws Exception {
-        UserDao dao = new UserDao();
-
-        User user = new User();
-        user.setId("devegoist");
-        user.setName("김은수");
-        user.setPassword("123");
-
-        dao.add(user);
-
-        System.out.println(user.getId() + " 등록 성공");
-
-        User user2 = dao.get(user.getId());
-        System.out.println(user2.getName());
-        System.out.println(user2.getPassword());
-
-        System.out.println(user2.getId() + " 조회 성공");
-    }
-
+public abstract class UserDao {
     public void add(User user) throws Exception {
         Connection c = getConnection();
 
@@ -66,9 +46,5 @@ public class UserDao {
         return user;
     }
 
-    private Connection getConnection() throws Exception {
-        Class.forName("org.h2.Driver");
-        Connection c = DriverManager.getConnection("jdbc:h2:mem:testdb", "sa", "");
-        return c;
-    }
+    public abstract Connection getConnection() throws Exception;
 }
